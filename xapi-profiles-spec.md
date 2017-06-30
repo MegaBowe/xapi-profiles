@@ -16,7 +16,7 @@ The serialized JSON form of an xAPI Profiles 1.0 profile version must be consist
 
 Under the hood, xAPI Profiles will use several well-established semantic web technologies: SKOS, to connect xAPI concepts together, and PROV, to describe the provenance (most notably the versioning) of profiles. Several properties in xAPI Profiles use names of properties from SKOS and PROV.
 
-# Structure
+# 1 Profile Structure
 
 Profiles serve two primary technical goals. First, they contain metadata about xAPI Concepts intended for reuse within statements, such as verbs and activity types. The metadata includes connections between Concepts, not just within the current profile, but also as used in other profiles, supporting a rich ecosystem of related terms. An xAPI Concept is any building block for use in Statements, and new versions of the profile specification may introduce new Concepts that can be described. The basis for xAPI Concepts is the SKOS Concept, a flexible way to refer to "specific ideas or meanings established within a knowledge organization system."
 
@@ -24,7 +24,7 @@ Second, they contain specific rules about using those Concepts properly in speci
 
 To assist in accomplishing these two primary goals, profiles also contain metadata about themselves—descriptions, authorship, versioning, and so forth.
 
-## Document Interpretation and General Restrictions
+## 1.1 Document Interpretation and General Restrictions
 
 * All properties in tables are required in all cases unless marked optional.
 * Properties marked optional may be required in some situations. If no additional information is provided on the usage of an optional property, including it or not is entirely up to the profile author.
@@ -33,11 +33,11 @@ To assist in accomplishing these two primary goals, profiles also contain metada
 * JSON-LD keywords (or aliases thereof) that are not specified as properties in this document MAY be included anywhere they are legal in JSON-LD.
 * Values in a profile MUST NOT be: empty objects, null, empty strings, or empty arrays.
 
-## Using Profiles in Statements
+## 1.2 Using Profiles in Statements
 
 Using an introduced Concept, such as an activity type, verb, attachment usage type, extension, activity, or document resource, should be done freely, provided the defined usage and meaning are adhered to. But a Learning Record Provider can go further, and make sure to adhere to profile-described statement templates and patterns. Learning Record Providers creating statements that conform to matching profile-described statement templates and patterns SHOULD include the most up to date conformant profile version as a category context activity with id equal to the version's `@id` in those statements, and statements containing a profile version as a category context activity MUST conform to any matching templates and patterns that profile version describes.
 
-## Profile Metadata
+## 1.3 Profile Metadata
 
 Name | Values
 ---- | ------
@@ -55,7 +55,7 @@ Name | Values
 
 
 
-### Profile Version Objects
+### 1.3.1 Profile Version Objects
 
 Name | Values
 ---- | ------
@@ -67,7 +67,7 @@ Name | Values
 
 Profile version objects make it convenient to track version history for profiles, following recommendations for SKOS concept schemes and PROV version tracking generally. By using versions this way, it is possible to answer precise questions such as “what version of this profile was current on the 3rd of January last year?”. Lack of robust versioning is frequently identified as an issue with RDF data.
 
-### Organizations and Persons
+### 1.3.2 Organizations and Persons
 
 Use one of these in the `author` property to indicate the author of this profile version.
 
@@ -77,11 +77,11 @@ Name | Values
 `name` | A string with the name of the organization or person
 `url` | *Optional*. A URL for the Person or Group.
 
-## Concepts
+## 1.4 Concepts
 
 * All members of a profile's `concepts` array MUST be one of the concepts listed in this section.
 
-### Core Concepts: Verbs, Activity Types, and Attachment Usage Types
+### 1.4.1 Core Concepts: Verbs, Activity Types, and Attachment Usage Types
 
 These Concepts are the most central to building rich, reusable profiles.
 
@@ -101,7 +101,7 @@ Name | Values
 `relatedMatch` | *Optional*. An array of IRIs of concepts of the same @type from a different profile or a different version of the same profile that has a related meaning that is not clearly narrower or broader. Useful to establish conceptual links between profiles that can be used for discovery. This SHOULD be used to connect possible replacement Concepts to removed Concepts from previous versions of the same profile, and for possible replacement Concepts in other profiles of deprecated concepts, as well as other loose relations.
 `related` | *Optional*. An array of IRIs of concepts of the same @type from this profile version that are close conceptual matches to this concept's meaning. This property MUST only be used on concepts that are deprecated to indicate possible replacement concepts in the same profile, if there are any.
 
-### Extensions
+### 1.4.2 Extensions
 
 
 Name | Values
@@ -125,7 +125,7 @@ Learning Record Providers MUST, for xAPI Statements using Extensions defined her
 * a ResultExtension MUST only be used in result
 * an ActivityExtension MUST only be used in an Activity Definition.
 
-### Document Resources
+### 1.4.3 Document Resources
 
 The @id MUST be used as the stateId or profileId (as appropriate) when interacting with the corresponding resource.
 
@@ -146,7 +146,7 @@ Name | Values
 * profiles MUST use at most one of `schema` and `inlineSchema` for Document Resources
 
 
-### Activities
+### 1.4.4 Activities
 
 These Concepts are just literal xAPI Activity definitions the profile wants to provide for use. This is the profile's canonical version of the Activity. Except for `@context`, the activityDefinition in this Concept MUST be a legal xAPI Activity Definition. When using the Activity, a Statement MUST use the `@id` for the Activity `id`, and MUST NOT include `@context` in the Activity definition. All other properties of the activityDefinition are considered part of the definition, and any Statement using the Activity SHOULD either not include the definition, or SHOULD include all properties given here in the definition exactly as given, except for `name` and `description` or other language maps, which SHOULD only include languages appropriate to the situation, possibly including ones not present in the profile yet.
 
@@ -176,7 +176,7 @@ Name | Values
 `target` | *Optional*. As in xAPI Activity Definitions.
 `steps` | *Optional*. As in xAPI Activity Definitions.
 
-## Statement Templates
+## 1.5 Statement Templates
 
 A Statement Template describes one way statements following the profile may be structured. The verb, object activity type, attachment usage types, and context activity types listed are the determining properties. When authoring a statement to follow a template, a Learning Record Provider MUST include all the determining properties, as well as follow all rules in the template. Any statement including all the determining properties and using the profile version as a category context activity MUST follow the rules. In a profile, no Statement Template's determining properties may be a subset of any other Statement Template's determining properties. Additionally, we recommend picking one of the determining properties to use in all Statement Templates in a profile, with different values in each, since this ensures each statement matches at most one Statement Template in a given profile. A profile SHOULD ensure each statement following any of its Statement Templates will match at most one Statement Template.
 
@@ -200,7 +200,7 @@ Name | Values
 `attachmentUsageType` | *Optional*. Array of attachment usage type IRIs
 `rules` | *Optional*. Array of Statement Template Rules
 
-### Statement Template Rules
+### 1.5.1 Statement Template Rules
 
 Statement Template Rules describe a location or locations within statements using JSONPath, then describe the restrictions on that value, such as inclusion, exclusion, or specific values allowed or disallowed. For example, to require at least one grouping, the rules might be something like:
 
@@ -238,7 +238,7 @@ I propose we do not include alignments in the initial draft
 
 I'm unsure enough how to do this I propose we do not include statement reference constraints in the initial draft. It would probably be included as a special case in the statement template rules, above.
 
-## Patterns
+## 1.6 Patterns
 
 Patterns are groups of statements matching particular statement templates, ordered in certain ways. For example, an allowed pattern in a video profile might start with a statement about playing a video and then be followed by statements about pausing, skipping, playing again, and so forth. A pattern is determined by a given registration — all statements within a Pattern MUST use the same registration, and statements not part of a Pattern MUST NOT use the same registration as any that are.
 
@@ -269,7 +269,7 @@ A pattern only matches if it matches greedily. That is, each optional, zeroOrMor
 When checking previously collected statements for matching a pattern, ordering MUST be based on timestamp. In the event two or more statements have identical timestamps, any order within those statements is allowed.
 When checking statements for matching a pattern upon receipt, ordering MUST be based on receipt order insofar as that can be determined. If statements are received in the same batch and they are being checked upon receipt, within the batch statements MUST be ordered first by timestamp, and if timestamps are the same, by order within the statement array, with lower indices earlier.
 
-### Implied Patterns
+### 1.6.1 Implied Patterns
 
 If a Statement Template is allowed solo, Learning Record Providers MAY send it as an Implied Pattern. If it is not, Learning Record Providers MUST NOT send it as an Implied Pattern. An Implied Pattern MUST include the profile version in category, and MAY include a registration as if it were described as a Pattern with a sequence of one statement template, but MAY leave off the registration.
 
@@ -411,7 +411,7 @@ There will be lots of examples, but this is largely an exercise in feeling out w
 }
 ```
 
-# Communication
+# 2 Communication
 
 In addition to the ability to host profiles separately, there will be one or more pieces of infrastructure for querying and manipulating profiles. A central component will be a “Profile Server” to make it easier to manage and answer questions about profiles from a centralized location.
 
@@ -463,13 +463,13 @@ Virtually identical to the above, just replace being a Verb or Activity Type wit
 
 (Prefixes are omitted in these examples until a complete context is ready).
 
-## Validating Statements
+## 2.1 Validating Statements
 
-### Statement Templates
+### 2.1.1 Statement Templates
 
 To retrieve the information needed to validate a statement matches applicable Statement Templates, a simple SPARQL query suffices — retrieve all the statement templates, with their rules, for the profile(s) indicated in the statement. From there, apply a series of operations. First, for each profile, find templates that match per verb, object activity type, and attachment usage type. There will generally be one or zero. If zero, this statement does not match any templates in the profile. From there, for each matching template, iterate through the rules, executing the JSONPath queries and checking for included, excluded, or values rules. If all the rules are fulfilled, then the statement matches the template. If the statement matches at least one template in the profile, it matches that profile. If a statement matches every profile in its context, it validates.
 
-### Patterns
+### 2.1.2 Patterns
 
 To validate a series of statements sharing a registration (and, if applicable, subregistration) matches a pattern for a specified profile, include the profile's patterns in the retrieved data along with the data for statement templates. For each statement, check which statement templates are matched. If a statement does not match at least one statement template for the specified profile, the statements do not match the pattern.
 
@@ -556,7 +556,7 @@ partial | non empty            | outcome could be interpreted as success with no
 failure | original statements  | pattern failed to match statements. Note: if an optional or zeroOrMore pattern is directly inside an alternates pattern, it is possible for failure to be returned when partial is correct, due to decidability issues. Profile authors SHOULD NOT put optional or zeroOrMore directly inside alternates.
 
 
-### Libraries
+### 2.1.3 Libraries
 
 Any library that implements the algorithms given here will be an xAPI Profile Processor library. Reference implementation libraries in one or more languages will be provided.
 
