@@ -16,7 +16,7 @@ The serialized JSON form of an xAPI Profiles 1.0 profile version must be consist
 
 Under the hood, xAPI Profiles will use several well-established semantic web technologies: SKOS, to connect xAPI concepts together, and PROV, to describe the provenance (most notably the versioning) of profiles. Several properties in xAPI Profiles use names of properties from SKOS and PROV.
 
-# 1 Profile Structure
+# 1.0 Profile Structure
 
 Profiles serve two primary technical goals. First, they contain metadata about xAPI Concepts intended for reuse within statements, such as verbs and activity types. The metadata includes connections between Concepts, not just within the current profile, but also as used in other profiles, supporting a rich ecosystem of related terms. An xAPI Concept is any building block for use in Statements, and new versions of the profile specification may introduce new Concepts that can be described. The basis for xAPI Concepts is the SKOS Concept, a flexible way to refer to "specific ideas or meanings established within a knowledge organization system."
 
@@ -411,7 +411,7 @@ There will be lots of examples, but this is largely an exercise in feeling out w
 }
 ```
 
-# 2 Communication
+# 2.0 Communication
 
 In addition to the ability to host profiles separately, there will be one or more pieces of infrastructure for querying and manipulating profiles. A central component will be a “Profile Server” to make it easier to manage and answer questions about profiles from a centralized location.
 
